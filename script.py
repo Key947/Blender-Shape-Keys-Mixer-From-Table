@@ -19,7 +19,13 @@ rows = [row for row in reader if row]
 
 def set_shape_values(mapping):
     for k, v in mapping.items():
-        obj.data.shape_keys.key_blocks[k].value = v
+        key_block = obj.data.shape_keys.key_blocks[k]
+        key_block.value = v
+        # Expand slider range if value is outside default 0–1
+        if v < key_block.slider_min:
+            key_block.slider_min = v
+        if v > key_block.slider_max:
+            key_block.slider_max = v
 
 def reset_shape_values(mapping):
     for k in mapping.keys():

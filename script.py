@@ -29,10 +29,11 @@ for row in rows:
     if len(row) < 1:
         continue
 
-    # Parse row data
+    # --- Parse row ---
     output_name = row[0].strip()
-    key_names = [row[i].strip() for i in range(1, 4) if i < len(row) and row[i].strip()]
-    key_values = [float(row[i]) for i in range(4, 7) if i < len(row) and row[i].strip()]
+    # Keys are in columns 1–4, values in columns 5–8
+    key_names = [row[i].strip() for i in range(1, 5) if i < len(row) and row[i].strip()]
+    key_values = [float(row[i]) for i in range(5, 9) if i < len(row) and row[i].strip()]
     key_value_map = {k: v for k, v in zip(key_names, key_values)}
 
     # --- Handle blank mix → use Basis ---
@@ -48,7 +49,6 @@ for row in rows:
     missing = [k for k in key_value_map.keys() if k not in obj.data.shape_keys.key_blocks]
     if missing:
         error_name = f"[Error] Missing: {', '.join(missing)}"
-        # Create a placeholder shape key from Basis with the error name
         new_key = obj.shape_key_add(name=error_name, from_mix=False)
         print(f"[Error] Shape key(s) not found: {', '.join(missing)} — created placeholder '{error_name}'")
         continue
